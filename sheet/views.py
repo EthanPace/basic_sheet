@@ -9,21 +9,21 @@ def index(request):
 
 @csrf_exempt
 def crud(request):
-	if request.method == 'get':
-		read(request)
-	elif request.method == 'post':
-		create(request)
-	elif request.method == 'put':
-		update(request)
-	elif request.method == 'delete':
-		delete(request)
+	if request.method == 'GET':
+		return read(request)
+	elif request.method == 'POST':
+		return create(request)
+	elif request.method == 'PUT':
+		return update(request)
+	elif request.method == 'DELETE':
+		return delete(request)
 	else:
 		return JsonResponse({'error': 'method not supported'})
 
 def read(request):
-	body = loads(request.body)
-	if 'id' in body:
-		sheet = Sheet.objects.get(id=body['id'])
+	params = request.GET
+	if 'id' in params:
+		sheet = Sheet.objects.get(id=params['id'])
 		return JsonResponse(sheet.to_dict(), safe=False, status=200)
 	else:
 		return JsonResponse({'error': 'id not found'}, status=400)
